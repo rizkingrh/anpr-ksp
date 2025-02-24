@@ -3,10 +3,11 @@ import os
 import time
 import re
 from ultralytics import YOLO
+from paddleocr import PaddleOCR
 from fast_plate_ocr import ONNXPlateRecognizer
 
 # OCR
-reader = ONNXPlateRecognizer('global-plates-mobile-vit-v2-model')
+ocr = PaddleOCR(use_angle_cls=True, lang='en')
 
 # Load model hasil training
 model = YOLO("best.pt")  # Sesuaikan dengan modelmu
@@ -20,6 +21,7 @@ cap = cv2.VideoCapture(0)
 
 # Waktu terakhir OCR dijalankan
 last_ocr_time = time.time()
+label_box = ""
 
 while cap.isOpened():
     ret, frame = cap.read()
@@ -47,11 +49,15 @@ while cap.isOpened():
             plate_region = frame[y1:y1 + crop_height, x1 + crop_width_offset:x2 - crop_width_offset]
             plate_region = cv2.cvtColor(plate_region, cv2.COLOR_BGR2GRAY)
             
-            label_box = reader.run(plate_region)
-            label_box = label_box[0]
-            label_box = re.sub(r'[^A-Za-z0-9 ]+', '', label_box).upper()
+            label_box = ocr.ocr(plate_region, cls=True)
+            # label_box = label_box[0]
+            # label_box = re.sub(r'[^A-Za-z0-9 ]+', '', label_box).upper()
             # plate_regex = r'^[A-Za-z]{1,2}\d{1,4}[A-Za-z]{0,3}$'
+            if label_box and label_box[0]:
+                label_box = " ".join([res[1][0] for res in label_box[0]])
+                label_box = re.sub(r'[^A-Za-z0-9]+', '', label_box).upper()
             print(label_box)
+            
             # match = re.match(plate_regex, label_box)
             # if match:
             #     print(f"Plat nomor valid: {label_box}")
@@ -69,8 +75,10 @@ while cap.isOpened():
                 print(f"Plat nomor tersimpan: {plate_filename}")
 
                 # OCR
-                plate_text = reader.run(plate_filename)
-                plate_text = re.sub(r'[^A-Za-z0-9 ]+', '', plate_text[0])
+                plate_text = ocr.ocr(plate_filename, cls=True)
+                if plate_text and plate_text[0]:
+                    plate_text = " ".join([res[1][0] for res in plate_text[0]])
+                    plate_text = re.sub(r'[^A-Za-z0-9]+', '', plate_text).upper()
 
                 # Simpan hasil OCR ke file teks
                 text_filename = f"{output_folder}/plate_numbers.txt"
@@ -85,7 +93,7 @@ while cap.isOpened():
             # Tampilkan teks di layar
             cv2.putText(frame, f"Plate {conf:.2f}", (x1, y1 - 10),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            cv2.putText(frame, label_box, (10, 60), 
+            cv2.putText(frame, str(label_box), (10, 60), 
                 cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
 
     # Tampilkan hasil di layar
