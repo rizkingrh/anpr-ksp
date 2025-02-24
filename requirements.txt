@@ -4,3 +4,4 @@ paddlepaddle
 paddleocr
 mysql-connector-python
 easyocr
+fast_plate_ocr
