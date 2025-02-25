@@ -108,7 +108,7 @@ while cap.isOpened():
             current_time = time.time()
             if current_time - last_ocr_time >= 5:
                 timestamp = int(current_time)
-                plate_filename = f"{output_folder}/plate_{timestamp}.jpg"
+                plate_filename = f"{output_folder}/plate_{timestamp}_{label_box}.jpg"
                 cv2.imwrite(plate_filename, plate_region)
                 print(f"Plat nomor tersimpan: {plate_filename}")
 
