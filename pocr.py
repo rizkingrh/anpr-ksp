@@ -42,7 +42,7 @@ def connect_to_db():
 
         # Create table if it doesn't exist
         create_table_query = """
-        CREATE TABLE IF NOT EXISTS my_data (
+        CREATE TABLE IF NOT EXISTS histories (
             id INT AUTO_INCREMENT PRIMARY KEY,
             numberplate TEXT,
             time TIME,
@@ -50,7 +50,7 @@ def connect_to_db():
         )
         """
         cursor.execute(create_table_query)
-        print("Table 'my_data' checked/created.")
+        print("Table 'histories' checked/created.")
 
         return connection
     except mysql.connector.Error as err:
@@ -62,7 +62,7 @@ def save_to_database(numberplate, time, date):
         try:
             cursor = db_connection.cursor()
             query = """
-                INSERT INTO my_data (numberplate, time, date)
+                INSERT INTO histories (numberplate, time, date)
                 VALUES (%s, %s, %s)
             """
             cursor.execute(query, (numberplate, time, date))
@@ -100,8 +100,9 @@ while cap.isOpened():
             label_box = ocr.ocr(plate_region, cls=True)
             
             if label_box and label_box[0]:
-                label_box = " ".join([res[1][0] for res in label_box[0]])
+                label_box = " ".join(res[1][0] for res in label_box[0])
                 label_box = re.sub(r'[^A-Za-z0-9]+', '', label_box).upper()
+                
             print(label_box)
 
             # Simpan gambar plat nomor ke lokal setiap 5 detik
@@ -124,8 +125,9 @@ while cap.isOpened():
                     text_file.write(f"{plate_text}\n")
                 
                 current_time_db = datetime.now()
+                label_box_db = str(label_box)
                 save_to_database(
-                    label_box,
+                    label_box_db,
                     current_time_db.strftime("%H:%M:%S"),
                     current_time_db.strftime("%Y-%m-%d")
                 )
