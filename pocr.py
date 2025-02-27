@@ -15,7 +15,7 @@ ocr = PaddleOCR(use_angle_cls=True, lang='en')
 model = YOLO("best.pt")
 
 # Buat folder untuk menyimpan gambar plat
-output_folder = "plates"
+output_folder = r"C:\laragon\www\anpr-dashboard\public\plates"
 os.makedirs(output_folder, exist_ok=True)
 
 # Inisialisasi webcam
@@ -45,6 +45,7 @@ def connect_to_db():
         CREATE TABLE IF NOT EXISTS histories (
             id INT AUTO_INCREMENT PRIMARY KEY,
             numberplate TEXT,
+            image TEXT,
             time TIME,
             date DATE
         )
@@ -57,17 +58,17 @@ def connect_to_db():
         print(f"Error connecting to database: {err}")
         raise
 
-def save_to_database(numberplate, time, date):
+def save_to_database(numberplate, image, time, date):
         """Save data to the MySQL database."""
         try:
             cursor = db_connection.cursor()
             query = """
-                INSERT INTO histories (numberplate, time, date)
-                VALUES (%s, %s, %s)
+                INSERT INTO histories (numberplate, image, time, date)
+                VALUES (%s, %s, %s, %s)
             """
-            cursor.execute(query, (numberplate, time, date))
+            cursor.execute(query, (numberplate, image, time, date))
             db_connection.commit()
-            print(f"Data saved to database: {numberplate}, {time}, {date}")
+            print(f"Data saved to database: {numberplate}, {image}, {time}, {date}")
         except mysql.connector.Error as err:
             print(f"Error saving to database: {err}")
             raise
@@ -126,8 +127,10 @@ while cap.isOpened():
                 
                 current_time_db = datetime.now()
                 label_box_db = str(label_box)
+                image_db = f"plates/plate_{timestamp}_{label_box}.jpg"
                 save_to_database(
                     label_box_db,
+                    image_db,
                     current_time_db.strftime("%H:%M:%S"),
                     current_time_db.strftime("%Y-%m-%d")
                 )
