@@ -16,7 +16,9 @@ output_folder = "plates"
 os.makedirs(output_folder, exist_ok=True)
 
 # Inisialisasi webcam
-cap = cv2.VideoCapture(0)
+url2 = "rtsp://admin:Gateksp2024@192.168.2.106?tcp"
+cap = cv2.VideoCapture(url2, cv2.CAP_FFMPEG)
+# cap = cv2.VideoCapture(0)
 
 # Waktu terakhir OCR dijalankan
 last_ocr_time = time.time()
@@ -27,6 +29,7 @@ while cap.isOpened():
         break
     
     # Deteksi plat nomor pada frame
+    frame = cv2.resize(frame, (1280, 720))
     results = model(frame)
 
     # Tampilkan teks "Plate Detection" di kiri atas layar
