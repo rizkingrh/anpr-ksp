@@ -1,7 +1,7 @@
 import queue
 import threading
 from typing import Tuple, Optional
-from api_client import APIClient
+from .api_client import APIClient
 
 class APIQueueManager:
     """Manages API requests in a separate thread to avoid blocking"""

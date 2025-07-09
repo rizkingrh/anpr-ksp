@@ -1,6 +1,10 @@
 import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 from config import Config
-from anpr_system import ANPRSystem
+from utils.anpr_system import ANPRSystem
 
 def main():
     try:
