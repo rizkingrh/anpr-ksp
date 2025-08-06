@@ -1,6 +1,6 @@
 import cv2
 import re
-from fast_plate_ocr import ONNXPlateRecognizer
+from fast_plate_ocr import LicensePlateRecognizer
 from typing import Optional
 import numpy as np
 
@@ -8,7 +8,7 @@ class OCRProcessor:
     """Handles optical character recognition for license plates"""
     
     def __init__(self, model_path: str):
-        self.reader = ONNXPlateRecognizer(model_path)
+        self.reader = LicensePlateRecognizer(model_path)
     
     def process_plate(self, plate_image: np.ndarray) -> str:
         """
@@ -22,10 +22,10 @@ class OCRProcessor:
         """
         try:
             # Convert to grayscale for better OCR
-            plate_img_bw = cv2.cvtColor(plate_image, cv2.COLOR_BGR2GRAY)
+            # plate_img_bw = cv2.cvtColor(plate_image, cv2.COLOR_BGR2GRAY)
             
             # Run OCR
-            ocr_result = self.reader.run(plate_img_bw)
+            ocr_result = self.reader.run(plate_image)
             
             # Clean the result
             if ocr_result and len(ocr_result) > 0:

@@ -10,12 +10,12 @@ class Config:
     
     # Video Configuration
     # VIDEO_SOURCE: str = "rtsp://admin:ZUHDGC@192.168.30.160"
-    VIDEO_SOURCE: str = "sample_20detik720.mp4"  # For testing
+    VIDEO_SOURCE: str = "sample.mp4"  # For testing
     
     # Model Configuration
     MODEL_ID: str = "indonesia-license-plate-iqrtj/3"
     API_KEY: str = "bwIRBiOk7e1dT6URaaEh"
-    OCR_MODEL_PATH: str = "global-plates-mobile-vit-v2-model"
+    OCR_MODEL_PATH: str = "cct-s-v1-global-model"
     
     # Directory Configuration
     OUTPUT_DIR: str = "captured_plates"
@@ -33,6 +33,7 @@ class Config:
     # Other Configuration
     CONFIDENCE_THRESHOLD: float = 0.5
     
+    # For polygon zone in real location multiplied by 3
     def __post_init__(self):
         if self.POLYGON_ZONES is None:
             self.POLYGON_ZONES = [

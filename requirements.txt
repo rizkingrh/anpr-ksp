@@ -1,7 +1,13 @@
-opencv-python
-ultralytics
-paddlepaddle
-paddleocr
-mysql-connector-python
-easyocr
-fast_plate_ocr
+# non GPU requirements
+inference==0.51.10
+supervision==0.25.1
+fast_plate_ocr[onnx]
+numpy
+requests
+
+# GPU requirements
+# inference-gpu==0.51.10
+# supervision==0.25.1
+# fast_plate_ocr[onnx-gpu]
+# numpy
+# requests

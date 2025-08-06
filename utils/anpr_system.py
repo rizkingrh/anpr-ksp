@@ -4,6 +4,7 @@ from inference import InferencePipeline
 from inference.core.interfaces.camera.entities import VideoFrame
 from typing import Set, Optional
 
+from config import Config
 from .ocr_processor import OCRProcessor
 from .api_client import APIClient
 from .file_manager import FileManager
@@ -13,7 +14,7 @@ from .visualization import Visualizer
 class ANPRSystem:
     """Main ANPR system class that orchestrates all components"""
     
-    def __init__(self, config):
+    def __init__(self, config: Config):
         self.config = config
         self.current_plate_text = ""
         self.captured_track_ids: Set[int] = set()
