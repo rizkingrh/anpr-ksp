@@ -1,2 +1,2 @@
 @echo off
-cmd /k "cd /d  C:\Users\rizki\Documents\GitHub\anpr-roboflow\fix\ANPR-Kawasan & python scheduleInference.py"
+    cmd /k "cd /d  C:\Users\rizki\Documents\GitHub\ksp-projects\anpr-ksp & .venv\Scripts\activate & python main.py"

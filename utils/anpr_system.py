@@ -34,9 +34,6 @@ class ANPRSystem:
         self.pipeline = None
     
     def start(self):
-        """Start the ANPR system"""
-        print("Starting ANPR system...")
-        
         # Start API queue manager
         self.api_queue_manager.start()
         

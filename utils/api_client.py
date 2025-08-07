@@ -9,6 +9,31 @@ class APIClient:
     def __init__(self, api_url: str):
         self.api_url = api_url
     
+    def test_connection(self) -> bool:
+        """
+        Test API connection by sending a simple request
+        
+        Returns:
+            True if connection is successful, False otherwise
+        """
+        try:
+            requests.get(self.api_url.replace('/store', ''), timeout=5)
+            return True
+        except requests.exceptions.ConnectionError:
+            print(f"❌ API Connection Error: Unable to connect to {self.api_url}")
+            print("   Please check if the API server is running and accessible.")
+            return False
+        except requests.exceptions.Timeout:
+            print(f"❌ API Connection Error: Request timeout when connecting to {self.api_url}")
+            print("   The API server is not responding within the timeout period.")
+            return False
+        except requests.exceptions.RequestException as e:
+            print(f"❌ API Connection Error: {e}")
+            return False
+        except Exception as e:
+            print(f"❌ Unexpected error during API connection test: {e}")
+            return False
+    
     def send_plate_data(self, plate_text: str, image_path: str) -> bool:
         """
         Send plate data to the API
