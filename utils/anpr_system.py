@@ -129,7 +129,6 @@ class ANPRSystem:
             
             if plate_text:
                 self.current_plate_text = plate_text
-                print(f"Detected plate: {plate_text}")
                 
                 image_path = self.file_manager.save_plate_image(plate_image, track_id)
                 

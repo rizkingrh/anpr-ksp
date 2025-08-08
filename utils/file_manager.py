@@ -34,7 +34,6 @@ class FileManager:
             
             success = cv2.imwrite(filename, plate_image)
             if success:
-                print(f"Saved license plate to {filename}")
                 return filename
             else:
                 print(f"Failed to save image to {filename}")
